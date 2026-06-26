@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PeacockAutoUpdater.Models
 {
-    public class GitHubRelease
+    public class GitHubReleaseObject
     {
         [JsonPropertyName("tag_name")]
         public string TagName { get; set; }

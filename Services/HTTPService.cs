@@ -12,12 +12,12 @@ namespace PeacockAutoUpdater.Services
     {
         private static readonly HttpClient client = new HttpClient();
 
-        static async Task<(bool, string)> GetLatestRelease(string githubURL, string lastVersion, string outputPath)
+        public async Task<(bool, string)> GetLatestRelease(string githubURL, string lastVersion, string outputPath)
         {
             try
             {
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("PeacockAutoUpdater");
-                var release = await client.GetFromJsonAsync<GitHubRelease>(githubURL);
+                var release = await client.GetFromJsonAsync<GitHubReleaseObject>(githubURL);
 
                 if (release == null)
                 {
