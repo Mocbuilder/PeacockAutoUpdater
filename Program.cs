@@ -6,10 +6,14 @@ namespace PeacockAutoUpdater
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            bool noDownload = false;
+            if (args[0] != null && args[0] == "-noDownload")
+            {
+                noDownload = true;
+            }
+
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -17,9 +21,10 @@ namespace PeacockAutoUpdater
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+            Application.Run(new MainForm(noDownload));
         }
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
@@ -35,9 +40,14 @@ namespace PeacockAutoUpdater
             }
         }
 
+        private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            LogAndShowException(e.Exception.Flatten(), "Async Task Error");
+        }
+
         private static void LogAndShowException(Exception ex, string title)
         {
-            MessageBox.Show($"A critical error occurred: {ex.Message}\n\nThe application may need to close.",
+            MessageBox.Show($"{ex.Message}",
                             title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }

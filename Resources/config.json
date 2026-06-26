@@ -1,6 +1,6 @@
 {
-  "PeacockRootPath": "",
+  "PeacockRootPath": "C:\\Temp",
   "PeacockGithubURL": "https://api.github.com/repos/thepeacockproject/Peacock/releases/latest",
-  "LastPeacockVersion": "",
+  "LastPeacockVersion": "0.0.0",
   "TempPath": "C:\\PAUTemp"
 }

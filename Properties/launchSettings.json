@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "PeacockAutoUpdater": {
+      "commandName": "Project"
+    },
+    "PAUNoDownload": {
+      "commandName": "Project",
+      "commandLineArgs": "-noDownload"
+    }
+  }
+}

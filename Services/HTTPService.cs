@@ -12,7 +12,7 @@ namespace PeacockAutoUpdater.Services
     {
         private static readonly HttpClient client = new HttpClient();
 
-        public async Task<(bool, string)> GetLatestRelease(string githubURL, string lastVersion, string outputPath)
+        public async Task<(bool, string)> GetLatestRelease(string githubURL, string lastVersion, string outputPath, bool noDownload)
         {
             try
             {
@@ -24,11 +24,11 @@ namespace PeacockAutoUpdater.Services
                     return (false, "No release found. Something probably went wrong.");
                 }
 
-                if (release.TagName != lastVersion)
+                if (release.TagName != lastVersion && !noDownload)
                 {
                     byte[] fileBytes = await client.GetByteArrayAsync(release.ZipballUrl);
                     await File.WriteAllBytesAsync(outputPath, fileBytes);
-                    return (true, "");
+                    return (true, release.TagName.Substring(1));
                 }
                 else
                 {

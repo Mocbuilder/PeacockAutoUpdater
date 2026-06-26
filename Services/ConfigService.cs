@@ -31,7 +31,7 @@ namespace PeacockAutoUpdater.Services
             else
             {
                 var assembly = Assembly.GetExecutingAssembly();
-                string resourceName = "Shorthand.NET.config.json";
+                string resourceName = "PeacockAutoUpdater.Resources.config.json";
 
                 using (Stream? stream = assembly.GetManifestResourceStream(resourceName))
                 {
