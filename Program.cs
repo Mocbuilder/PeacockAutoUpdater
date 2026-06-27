@@ -9,9 +9,20 @@ namespace PeacockAutoUpdater
         static void Main(string[] args)
         {
             bool noDownload = false;
-            if (args[0] != null && args[0] == "-noDownload")
+            if (args != null && args.Length > 0)
             {
-                noDownload = true;
+                for(int i = 0; i < args.Length; i++)
+                {
+                    switch (args[i])
+                    {
+                        case "-noDownload":
+                            noDownload = true;
+                            break;
+                        case "-newConfig":
+                            File.Delete("config.json");
+                            break;
+                    }
+                }
             }
 
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);

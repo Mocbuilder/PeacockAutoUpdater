@@ -5,7 +5,7 @@
     },
     "PAUNoDownload": {
       "commandName": "Project",
-      "commandLineArgs": "-noDownload"
+      "commandLineArgs": "-noDownload -newConfig"
     }
   }
 }
