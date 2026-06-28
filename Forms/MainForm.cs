@@ -105,6 +105,27 @@ namespace PeacockAutoUpdater
             }
         }
 
+        private void button_resync_MouseHover(object sender, EventArgs e)
+        {
+            button_resync.BackgroundImage = Properties.Resources.rotate_ccw_grey;
+        }
+
+        private void button_resync_MouseLeave(object sender, EventArgs e)
+        {
+            button_resync.BackgroundImage = Properties.Resources.rotate_ccw;
+        }
+
+        private void button_resync_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (button_resync.ClientRectangle.Contains(e.Location))
+            {
+                if (button_resync.BackgroundImage != Properties.Resources.rotate_ccw_grey)
+                {
+                    button_resync.BackgroundImage = Properties.Resources.rotate_ccw_grey;
+                }
+            }
+        }
+
         //Safetylayer, if mouse moves outside button too fast and isnt captured doing so, then movement on form is caught
         protected override void OnMouseMove(MouseEventArgs e)
         {

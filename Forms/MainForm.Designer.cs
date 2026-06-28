@@ -31,6 +31,7 @@
             button_update = new Button();
             button_settings = new Button();
             tableLayoutPanel_main = new TableLayoutPanel();
+            button_resync = new Button();
             richTextBox_version = new RichTextBox();
             tableLayoutPanel_main.SuspendLayout();
             SuspendLayout();
@@ -42,7 +43,7 @@
             button_update.Enabled = false;
             button_update.FlatStyle = FlatStyle.Flat;
             button_update.Font = new Font("Verdana", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button_update.Location = new Point(15, 333);
+            button_update.Location = new Point(77, 333);
             button_update.Margin = new Padding(15, 3, 15, 3);
             button_update.Name = "button_update";
             button_update.Size = new Size(262, 34);
@@ -61,10 +62,10 @@
             button_settings.FlatAppearance.MouseDownBackColor = Color.Transparent;
             button_settings.FlatAppearance.MouseOverBackColor = Color.Transparent;
             button_settings.FlatStyle = FlatStyle.Flat;
-            button_settings.Location = new Point(328, 15);
+            button_settings.Location = new Point(357, 15);
             button_settings.Margin = new Padding(3, 15, 15, 3);
             button_settings.Name = "button_settings";
-            button_settings.Size = new Size(75, 75);
+            button_settings.Size = new Size(46, 75);
             button_settings.TabIndex = 2;
             button_settings.UseVisualStyleBackColor = false;
             button_settings.Click += button_settings_Click;
@@ -74,12 +75,14 @@
             // 
             // tableLayoutPanel_main
             // 
-            tableLayoutPanel_main.ColumnCount = 2;
+            tableLayoutPanel_main.ColumnCount = 3;
+            tableLayoutPanel_main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
             tableLayoutPanel_main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-            tableLayoutPanel_main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            tableLayoutPanel_main.Controls.Add(button_update, 0, 1);
-            tableLayoutPanel_main.Controls.Add(richTextBox_version, 0, 0);
-            tableLayoutPanel_main.Controls.Add(button_settings, 1, 0);
+            tableLayoutPanel_main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
+            tableLayoutPanel_main.Controls.Add(button_resync, 0, 0);
+            tableLayoutPanel_main.Controls.Add(button_update, 1, 1);
+            tableLayoutPanel_main.Controls.Add(richTextBox_version, 1, 0);
+            tableLayoutPanel_main.Controls.Add(button_settings, 2, 0);
             tableLayoutPanel_main.Dock = DockStyle.Fill;
             tableLayoutPanel_main.Location = new Point(0, 0);
             tableLayoutPanel_main.Name = "tableLayoutPanel_main";
@@ -89,13 +92,33 @@
             tableLayoutPanel_main.Size = new Size(418, 467);
             tableLayoutPanel_main.TabIndex = 3;
             // 
+            // button_resync
+            // 
+            button_resync.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button_resync.BackColor = Color.Transparent;
+            button_resync.BackgroundImage = Properties.Resources.rotate_ccw;
+            button_resync.BackgroundImageLayout = ImageLayout.Zoom;
+            button_resync.FlatAppearance.BorderSize = 0;
+            button_resync.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            button_resync.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            button_resync.FlatStyle = FlatStyle.Flat;
+            button_resync.Location = new Point(3, 15);
+            button_resync.Margin = new Padding(3, 15, 15, 3);
+            button_resync.Name = "button_resync";
+            button_resync.Size = new Size(44, 75);
+            button_resync.TabIndex = 4;
+            button_resync.UseVisualStyleBackColor = false;
+            button_resync.MouseLeave += button_resync_MouseLeave;
+            button_resync.MouseHover += button_resync_MouseHover;
+            button_resync.MouseMove += button_resync_MouseMove;
+            // 
             // richTextBox_version
             // 
             richTextBox_version.BackColor = SystemColors.ControlDarkDark;
             richTextBox_version.BorderStyle = BorderStyle.None;
             richTextBox_version.Dock = DockStyle.Fill;
             richTextBox_version.Font = new Font("Verdana", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            richTextBox_version.Location = new Point(3, 3);
+            richTextBox_version.Location = new Point(65, 3);
             richTextBox_version.Name = "richTextBox_version";
             richTextBox_version.ReadOnly = true;
             richTextBox_version.ScrollBars = RichTextBoxScrollBars.None;
@@ -122,5 +145,6 @@
         private Button button_settings;
         private TableLayoutPanel tableLayoutPanel_main;
         private RichTextBox richTextBox_version;
+        private Button button_resync;
     }
 }
