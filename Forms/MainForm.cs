@@ -22,7 +22,6 @@ namespace PeacockAutoUpdater
             _httpService = new HTTPService();
             _updateService = new UpdateService(_configService);
 
-
             //Add some kind of throbber or other loading animation while doing this
             CheckLatestRelease();
 
