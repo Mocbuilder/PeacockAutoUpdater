@@ -1,11 +1,9 @@
 # Peacock AutoUpdater
 
-**Peacock AutoUpdater** is an automated updater for Peacock. It automatically checks the official Peacock GitHub repository for new releases and installs updates with minimal user interaction.
+**Peacock AutoUpdater** is an automated updater for [the Peacock Project](https://thepeacockproject.org/). It automatically checks the official Peacock GitHub repository for new releases and installs updates with minimal user interaction.
 
 > [!WARNING]
 > This project is currently in active development. Bugs and incomplete features may exist.
-
----
 
 ## Features
 
@@ -15,17 +13,14 @@
   - `contractsessions`
   - `plugins`
 
----
-
-## Planned / Work in Progress
+### Planned / Work in Progress
 
 - Automatic detection of currently installed Peacock version
+- Preservation of options.ini
 
----
+### Command Line Arguments
 
-## Command Line Arguments
-
-### `-noDownload`
+#### `-noDownload`
 
 Disables all GitHub interaction.
 
@@ -37,7 +32,7 @@ Disables all GitHub interaction.
 PeacockAutoUpdater.exe -noDownload
 ```
 
-### `-newConfig`
+#### `-newConfig`
 
 Forces regeneration of a fresh configuration file on startup.
 - Deletes existing config.json
