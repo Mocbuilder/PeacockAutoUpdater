@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             button_update = new Button();
             button_settings = new Button();
             tableLayoutPanel_main = new TableLayoutPanel();
@@ -43,10 +44,10 @@
             button_update.Enabled = false;
             button_update.FlatStyle = FlatStyle.Flat;
             button_update.Font = new Font("Verdana", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button_update.Location = new Point(77, 333);
+            button_update.Location = new Point(82, 333);
             button_update.Margin = new Padding(15, 3, 15, 3);
             button_update.Name = "button_update";
-            button_update.Size = new Size(262, 34);
+            button_update.Size = new Size(284, 34);
             button_update.TabIndex = 1;
             button_update.Text = "UPDATE";
             button_update.UseVisualStyleBackColor = false;
@@ -62,7 +63,7 @@
             button_settings.FlatAppearance.MouseDownBackColor = Color.Transparent;
             button_settings.FlatAppearance.MouseOverBackColor = Color.Transparent;
             button_settings.FlatStyle = FlatStyle.Flat;
-            button_settings.Location = new Point(357, 15);
+            button_settings.Location = new Point(388, 15);
             button_settings.Margin = new Padding(3, 15, 15, 3);
             button_settings.Name = "button_settings";
             button_settings.Size = new Size(46, 75);
@@ -89,7 +90,7 @@
             tableLayoutPanel_main.RowCount = 2;
             tableLayoutPanel_main.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel_main.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel_main.Size = new Size(418, 467);
+            tableLayoutPanel_main.Size = new Size(449, 467);
             tableLayoutPanel_main.TabIndex = 3;
             // 
             // button_resync
@@ -102,7 +103,7 @@
             button_resync.FlatAppearance.MouseDownBackColor = Color.Transparent;
             button_resync.FlatAppearance.MouseOverBackColor = Color.Transparent;
             button_resync.FlatStyle = FlatStyle.Flat;
-            button_resync.Location = new Point(3, 15);
+            button_resync.Location = new Point(8, 15);
             button_resync.Margin = new Padding(3, 15, 15, 3);
             button_resync.Name = "button_resync";
             button_resync.Size = new Size(44, 75);
@@ -119,11 +120,11 @@
             richTextBox_version.BorderStyle = BorderStyle.None;
             richTextBox_version.Dock = DockStyle.Fill;
             richTextBox_version.Font = new Font("Verdana", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            richTextBox_version.Location = new Point(65, 3);
+            richTextBox_version.Location = new Point(70, 3);
             richTextBox_version.Name = "richTextBox_version";
             richTextBox_version.ReadOnly = true;
             richTextBox_version.ScrollBars = RichTextBoxScrollBars.None;
-            richTextBox_version.Size = new Size(286, 227);
+            richTextBox_version.Size = new Size(308, 227);
             richTextBox_version.TabIndex = 3;
             richTextBox_version.Text = "";
             richTextBox_version.Enter += richTextBox_version_Enter;
@@ -133,8 +134,9 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlDarkDark;
-            ClientSize = new Size(418, 467);
+            ClientSize = new Size(449, 467);
             Controls.Add(tableLayoutPanel_main);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "MainForm";
             Text = "Peacock Auto Updater";
