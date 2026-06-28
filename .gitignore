@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # Release .zip files
 *.zip
+/PeacockAutoUpdater_v0.1.0-alpha.zip
