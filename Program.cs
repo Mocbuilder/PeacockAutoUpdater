@@ -73,6 +73,8 @@ namespace PeacockAutoUpdater
         {
             MessageBox.Show($"{ex.Message}",
                             title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            File.Create("error.log");
+            File.WriteAllText("error.log", ex.ToString());
         }
     }
 }
