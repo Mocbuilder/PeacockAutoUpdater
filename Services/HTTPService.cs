@@ -26,8 +26,21 @@ namespace PeacockAutoUpdater.Services
 
                 if (release.TagName != lastVersion && !noDownload)
                 {
-                    byte[] fileBytes = await client.GetByteArrayAsync(release.ZipballUrl);
+                    //find the asset that ends with .zip but doesn't have "-linux" in the name 'cause the others are useless for this purpose
+                    var windowsAsset = release.Assets.FirstOrDefault(a =>
+                        a.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) &&
+                        !a.Name.Contains("-linux", StringComparison.OrdinalIgnoreCase));
+
+                    if (windowsAsset == null)
+                    {
+                        return (GithubResultType.Error, "Could not find the Windows release asset (.zip).");
+                    }
+
+                    byte[] fileBytes = await client.GetByteArrayAsync(windowsAsset.BrowserDownloadUrl);
+
+                    Directory.CreateDirectory(outputPath);
                     await File.WriteAllBytesAsync(Path.Combine(outputPath, "update.zip"), fileBytes);
+
                     return (GithubResultType.NewerVersion, release.TagName.Substring(1));
                 }
                 else

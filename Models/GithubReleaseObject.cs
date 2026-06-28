@@ -12,7 +12,7 @@ namespace PeacockAutoUpdater.Models
         [JsonPropertyName("tag_name")]
         public string TagName { get; set; }
 
-        [JsonPropertyName("zipball_url")]
-        public string ZipballUrl { get; set; }
+        [JsonPropertyName("assets")]
+        public List<GitHubAsset> Assets { get; set; } = new();
     }
 }

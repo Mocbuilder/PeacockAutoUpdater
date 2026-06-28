@@ -25,7 +25,7 @@ namespace PeacockAutoUpdater
         {
             _configService = new ConfigService();
             _httpService = new HTTPService();
-            _updateService = new UpdateService();
+            _updateService = new UpdateService(_configService);
 
             if (_configService._config == null)
             {
@@ -133,7 +133,34 @@ namespace PeacockAutoUpdater
 
         private void button_update_Click(object sender, EventArgs e)
         {
+            bool preserveUserData = true;
 
+            if (_configService._config == null)
+            {
+                throw new Exception("Config could not be initialised.");
+            }
+
+            if (!Directory.Exists(_configService._config.PeacockRootFolder))
+            {
+                throw new Exception("Peacock Root Folder doesnt exist!");
+            }
+
+            Directory.CreateDirectory(_configService._config.TempPath);
+
+            using (var dialog = new UpdateConfirmForm())
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    preserveUserData = dialog.PreserveData;
+                    _configService.SetPreserveData(dialog.PreserveData);
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            _updateService.UpdatePeacock(preserveUserData);
         }
     }
 }
