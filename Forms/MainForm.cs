@@ -10,29 +10,35 @@ namespace PeacockAutoUpdater
         private ConfigService _configService;
         private HTTPService _httpService;
         private UpdateService _updateService;
-        public bool _noDownload;
+        private bool _noDownload;
+        private (GithubResultType, string) _lastResult;
 
         public MainForm(bool noDownload)
         {
             InitializeComponent();
             this.DoubleBuffered = true;
             _noDownload = noDownload;
-            SetupComponents();
-            richTextBox_version.SelectionAlignment = HorizontalAlignment.Center;
-        }
-
-        public async void SetupComponents()
-        {
             _configService = new ConfigService();
             _httpService = new HTTPService();
             _updateService = new UpdateService(_configService);
 
+
+            //Add some kind of throbber or other loading animation while doing this
+            CheckLatestRelease();
+
+            //Do this last, to make it work for the already appended Text
+            richTextBox_version.SelectionAlignment = HorizontalAlignment.Center;
+        }
+
+        public async void CheckLatestRelease()
+        {
             if (_configService._config == null)
             {
                 throw new Exception("Config could not be initialised.");
             }
 
-            (GithubResultType, string) releaseResult = await _httpService.GetLatestRelease(_configService._config.PeacockGithubURL, _configService._config.LastPeacockVersion, _configService._config.TempPath, _noDownload);
+            (GithubResultType, string) releaseResult = await _httpService.GetLatestRelease(_configService, _noDownload);
+            _lastResult = releaseResult;
 
             switch (releaseResult.Item1)
             {
@@ -44,7 +50,6 @@ namespace PeacockAutoUpdater
                     break;
                 case GithubResultType.NewerVersion:
                     UpdateVersionRichTextBox(_configService._config.LastPeacockVersion, releaseResult.Item2);
-                    _configService.SetLastPeacockVersion(releaseResult.Item2);
                     button_update.Enabled = true;
                     break;
             }
@@ -163,10 +168,8 @@ namespace PeacockAutoUpdater
 
             if (!Directory.Exists(_configService._config.PeacockRootFolder))
             {
-                throw new Exception("Peacock Root Folder doesnt exist!");
+                throw new Exception("Peacock Root Folder doesnt exist or wasnt selected! Please go to Settings and set the path correctly.");
             }
-
-            Directory.CreateDirectory(_configService._config.TempPath);
 
             using (var dialog = new UpdateConfirmForm())
             {
@@ -182,6 +185,24 @@ namespace PeacockAutoUpdater
             }
 
             _updateService.UpdatePeacock(preserveUserData);
+            _configService.SetLastPeacockVersion(_lastResult.Item2);
+            Resync();
+        }
+
+        private void button_resync_Click(object sender, EventArgs e)
+        {
+            Resync();
+        }
+
+        public void Resync()
+        {
+            //Also add loading thingy here
+            UpdateVersionRichTextBox(_configService._config.LastPeacockVersion, _lastResult.Item2);
+
+            if(_lastResult.Item1 != GithubResultType.NewerVersion)
+            {
+                CheckLatestRelease();
+            }
         }
     }
 }

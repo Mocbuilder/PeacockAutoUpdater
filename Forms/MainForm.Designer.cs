@@ -108,6 +108,7 @@
             button_resync.Size = new Size(44, 75);
             button_resync.TabIndex = 4;
             button_resync.UseVisualStyleBackColor = false;
+            button_resync.Click += button_resync_Click;
             button_resync.MouseLeave += button_resync_MouseLeave;
             button_resync.MouseHover += button_resync_MouseHover;
             button_resync.MouseMove += button_resync_MouseMove;

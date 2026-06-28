@@ -12,19 +12,19 @@ namespace PeacockAutoUpdater.Services
     {
         private static readonly HttpClient client = new HttpClient();
 
-        public async Task<(GithubResultType, string)> GetLatestRelease(string githubURL, string lastVersion, string outputPath, bool noDownload)
+        public async Task<(GithubResultType, string)> GetLatestRelease(ConfigService configService, bool noDownload)
         {
             try
             {
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("PeacockAutoUpdater");
-                var release = await client.GetFromJsonAsync<GitHubReleaseObject>(githubURL);
+                var release = await client.GetFromJsonAsync<GitHubReleaseObject>(configService._config.PeacockGithubURL);
 
                 if (release == null)
                 {
                     return (GithubResultType.Error, "No release found. Something probably went wrong.");
                 }
 
-                if (release.TagName != lastVersion && !noDownload)
+                if (release.TagName != configService._config.LastPeacockVersion && !noDownload)
                 {
                     //find the asset that ends with .zip but doesn't have "-linux" in the name 'cause the others are useless for this purpose
                     var windowsAsset = release.Assets.FirstOrDefault(a =>
@@ -38,8 +38,8 @@ namespace PeacockAutoUpdater.Services
 
                     byte[] fileBytes = await client.GetByteArrayAsync(windowsAsset.BrowserDownloadUrl);
 
-                    Directory.CreateDirectory(outputPath);
-                    await File.WriteAllBytesAsync(Path.Combine(outputPath, "update.zip"), fileBytes);
+                    Directory.CreateDirectory(configService._config.TempPath);
+                    await File.WriteAllBytesAsync(Path.Combine(configService._config.TempPath, "update.zip"), fileBytes);
 
                     return (GithubResultType.NewerVersion, release.TagName.Substring(1));
                 }
