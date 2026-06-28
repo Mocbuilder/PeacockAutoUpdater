@@ -127,8 +127,13 @@ namespace PeacockAutoUpdater
                 throw new Exception("Config could not be initialised.");
             }
 
-            SettingsForm settingsForm = new SettingsForm(_configService._config.PeacockRootFolder);
+            SettingsForm settingsForm = new SettingsForm(_configService._config.PeacockRootFolder, _configService);
             settingsForm.ShowDialog();
+        }
+
+        private void button_update_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

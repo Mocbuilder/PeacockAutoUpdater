@@ -49,6 +49,7 @@
             button_update.TabIndex = 1;
             button_update.Text = "UPDATE";
             button_update.UseVisualStyleBackColor = false;
+            button_update.Click += button_update_Click;
             // 
             // button_settings
             // 

@@ -27,7 +27,7 @@ namespace PeacockAutoUpdater.Services
                 if (release.TagName != lastVersion && !noDownload)
                 {
                     byte[] fileBytes = await client.GetByteArrayAsync(release.ZipballUrl);
-                    await File.WriteAllBytesAsync(outputPath, fileBytes);
+                    await File.WriteAllBytesAsync(Path.Combine(outputPath, "update.zip"), fileBytes);
                     return (GithubResultType.NewerVersion, release.TagName.Substring(1));
                 }
                 else

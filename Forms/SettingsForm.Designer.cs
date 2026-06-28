@@ -29,12 +29,13 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
-            button1 = new Button();
+            button_ok = new Button();
             button_cancel = new Button();
             label_peacockfolder_title = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
             button_openPeacockRootFolder = new Button();
             textBox_peacockRootFolder = new TextBox();
+            fbd_main = new FolderBrowserDialog();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             SuspendLayout();
@@ -45,7 +46,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Controls.Add(button1, 0, 2);
+            tableLayoutPanel1.Controls.Add(button_ok, 0, 2);
             tableLayoutPanel1.Controls.Add(button_cancel, 1, 2);
             tableLayoutPanel1.Controls.Add(label_peacockfolder_title, 0, 1);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 1);
@@ -59,19 +60,20 @@
             tableLayoutPanel1.Size = new Size(800, 450);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // button1
+            // button_ok
             // 
-            button1.Anchor = AnchorStyles.Bottom;
-            button1.BackColor = SystemColors.ControlDark;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Verdana", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.Location = new Point(144, 401);
-            button1.Margin = new Padding(3, 3, 3, 15);
-            button1.Name = "button1";
-            button1.Size = new Size(112, 34);
-            button1.TabIndex = 0;
-            button1.Text = "OK";
-            button1.UseVisualStyleBackColor = false;
+            button_ok.Anchor = AnchorStyles.Bottom;
+            button_ok.BackColor = SystemColors.ControlDark;
+            button_ok.FlatStyle = FlatStyle.Flat;
+            button_ok.Font = new Font("Verdana", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button_ok.Location = new Point(144, 401);
+            button_ok.Margin = new Padding(3, 3, 3, 15);
+            button_ok.Name = "button_ok";
+            button_ok.Size = new Size(112, 34);
+            button_ok.TabIndex = 0;
+            button_ok.Text = "OK";
+            button_ok.UseVisualStyleBackColor = false;
+            button_ok.Click += button_ok_Click;
             // 
             // button_cancel
             // 
@@ -86,15 +88,16 @@
             button_cancel.TabIndex = 1;
             button_cancel.Text = "CANCEL";
             button_cancel.UseVisualStyleBackColor = false;
+            button_cancel.Click += button_cancel_Click;
             // 
             // label_peacockfolder_title
             // 
             label_peacockfolder_title.Anchor = AnchorStyles.None;
             label_peacockfolder_title.AutoSize = true;
-            label_peacockfolder_title.Font = new Font("Verdana", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label_peacockfolder_title.Location = new Point(92, 211);
+            label_peacockfolder_title.Font = new Font("Verdana", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label_peacockfolder_title.Location = new Point(79, 211);
             label_peacockfolder_title.Name = "label_peacockfolder_title";
-            label_peacockfolder_title.Size = new Size(215, 25);
+            label_peacockfolder_title.Size = new Size(242, 25);
             label_peacockfolder_title.TabIndex = 2;
             label_peacockfolder_title.Text = "Peacock Root Folder";
             // 
@@ -125,6 +128,7 @@
             button_openPeacockRootFolder.TabIndex = 0;
             button_openPeacockRootFolder.Text = "...";
             button_openPeacockRootFolder.UseVisualStyleBackColor = false;
+            button_openPeacockRootFolder.Click += button_openPeacockRootFolder_Click;
             // 
             // textBox_peacockRootFolder
             // 
@@ -145,9 +149,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlDarkDark;
             ClientSize = new Size(800, 450);
+            ControlBox = false;
             Controls.Add(tableLayoutPanel1);
+            FormBorderStyle = FormBorderStyle.SizableToolWindow;
             Name = "SettingsForm";
-            Text = "SettingsForm";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            Text = "PeacockAutoUpdater Settings";
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
@@ -158,11 +166,12 @@
         #endregion
 
         private TableLayoutPanel tableLayoutPanel1;
-        private Button button1;
+        private Button button_ok;
         private Button button_cancel;
         private Label label_peacockfolder_title;
         private TableLayoutPanel tableLayoutPanel2;
         private Button button_openPeacockRootFolder;
         private TextBox textBox_peacockRootFolder;
+        private FolderBrowserDialog fbd_main;
     }
 }
