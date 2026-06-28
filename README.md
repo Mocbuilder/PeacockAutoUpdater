@@ -42,6 +42,9 @@ Forces regeneration of a fresh configuration file on startup.
 PeacockAutoUpdater.exe -newConfig
 ```
 
+### Supported Enviroments
+For now the only supported OS is Windows 10/11. A port for Linux is unlikely because WinForms (which this is entirely built on) doesn't support it. But, if I ever dive deeper into a cross-platform UI framework, I might revisit this.
+
 ## AI Usage Disclaimer
 
 No AI-Tools of any kind were used in the creation of any part of this project (Code, Resources, etc.), except for:
