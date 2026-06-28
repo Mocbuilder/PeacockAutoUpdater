@@ -13,36 +13,32 @@ namespace PeacockAutoUpdater
         private bool _noDownload;
         private (GithubResultType, string) _lastResult;
 
-        public MainForm(bool noDownload)
+        public MainForm(bool noDownload, ConfigService configService, HTTPService httpService, (GithubResultType, string) initialResult)
         {
             InitializeComponent();
             this.DoubleBuffered = true;
+
             _noDownload = noDownload;
-            _configService = new ConfigService();
-            _httpService = new HTTPService();
+            _configService = configService;
+            _httpService = httpService;
             _updateService = new UpdateService(_configService);
+            _lastResult = initialResult;
 
-            //Add some kind of throbber or other loading animation while doing this
-            CheckLatestRelease();
+            ProcessReleaseResult(_lastResult);
 
-            //Do this last, to make it work for the already appended Text
+            //do this last to make it apply to already appended text    
             richTextBox_version.SelectionAlignment = HorizontalAlignment.Center;
         }
 
-        public async void CheckLatestRelease()
+        private void ProcessReleaseResult((GithubResultType, string) releaseResult)
         {
-            if (_configService._config == null)
-            {
-                throw new Exception("Config could not be initialised.");
-            }
-
-            (GithubResultType, string) releaseResult = await _httpService.GetLatestRelease(_configService, _noDownload);
-            _lastResult = releaseResult;
+            if (_configService._config == null) return;
 
             switch (releaseResult.Item1)
             {
                 case GithubResultType.Error:
-                    MessageBox.Show($"Error: {releaseResult.Item2}");
+                    MessageBox.Show($"Error checking updates: {releaseResult.Item2}");
+                    UpdateVersionRichTextBox(_configService._config.LastPeacockVersion, "Error");
                     break;
                 case GithubResultType.SameVersion:
                     UpdateVersionRichTextBox(_configService._config.LastPeacockVersion, _configService._config.LastPeacockVersion);
@@ -54,10 +50,22 @@ namespace PeacockAutoUpdater
             }
         }
 
+        public async void CheckLatestRelease()
+        {
+            button_resync.Enabled = false;
+
+            var releaseResult = await _httpService.GetLatestRelease(_configService, _noDownload);
+            _lastResult = releaseResult;
+            ProcessReleaseResult(_lastResult);
+
+            button_resync.Enabled = true;
+        }
+
         public void UpdateVersionRichTextBox(string currentVersion, string newestVersion)
         {
             richTextBox_version.Clear();
 
+            richTextBox_version.SelectionAlignment = HorizontalAlignment.Center;
             richTextBox_version.AppendText("\n\n");
             richTextBox_version.SelectionColor = Color.White;
             richTextBox_version.AppendText("Current Peacock Version: ");
@@ -130,7 +138,7 @@ namespace PeacockAutoUpdater
             }
         }
 
-        //Safetylayer, if mouse moves outside button too fast and isnt captured doing so, then movement on form is caught
+        //safetylayer, if mouse moves outside button too fast and isnt captured doing so, then movement on form is caught
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -195,10 +203,9 @@ namespace PeacockAutoUpdater
 
         public void Resync()
         {
-            //Also add loading thingy here
             UpdateVersionRichTextBox(_configService._config.LastPeacockVersion, _lastResult.Item2);
 
-            if(_lastResult.Item1 != GithubResultType.NewerVersion)
+            if (_lastResult.Item1 != GithubResultType.NewerVersion)
             {
                 CheckLatestRelease();
             }

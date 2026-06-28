@@ -135,6 +135,7 @@
             BackColor = SystemColors.ControlDarkDark;
             ClientSize = new Size(418, 467);
             Controls.Add(tableLayoutPanel_main);
+            MaximizeBox = false;
             Name = "MainForm";
             Text = "Peacock Auto Updater";
             tableLayoutPanel_main.ResumeLayout(false);

@@ -1,3 +1,6 @@
+using PeacockAutoUpdater.Models;
+using PeacockAutoUpdater.Services;
+
 namespace PeacockAutoUpdater
 {
     internal static class Program
@@ -6,7 +9,7 @@ namespace PeacockAutoUpdater
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             bool noDownload = false;
             if (args != null && args.Length > 0)
@@ -34,8 +37,18 @@ namespace PeacockAutoUpdater
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
+            var configService = new ConfigService();
+            var httpService = new HTTPService();
+
+            (GithubResultType resultType, string version) releaseResult = (GithubResultType.Error, "Unknown");
+
+            if (configService._config != null)
+            {
+                releaseResult = await httpService.GetLatestRelease(configService, noDownload);
+            }
+
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm(noDownload));
+            Application.Run(new MainForm(noDownload, configService, httpService, releaseResult));
         }
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
