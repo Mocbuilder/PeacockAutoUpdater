@@ -17,11 +17,11 @@ namespace PeacockAutoUpdater.Forms
         private ConfigService _configService { get; set; }
         private bool settingsChanged = false;
 
-        public SettingsForm(string peacockRootFolder, ConfigService configService)
+        public SettingsForm(ConfigService configService)
         {
             InitializeComponent();
-            PeacockRootFolder = peacockRootFolder;
             _configService = configService;
+            PeacockRootFolder = _configService._config.PeacockRootFolder;
             textBox_peacockRootFolder.Text = PeacockRootFolder;
             fbd_main.SelectedPath = PeacockRootFolder;
         }
@@ -35,6 +35,11 @@ namespace PeacockAutoUpdater.Forms
 
         private bool ValidateSelectedSettings()
         {
+            if(string.IsNullOrEmpty(textBox_peacockRootFolder.Text))
+            {
+                return false;
+            }
+
             if (!File.Exists(Path.Combine(PeacockRootFolder, "PeacockPatcher.exe")) || !File.Exists(Path.Combine(PeacockRootFolder, "Start Server.cmd")))
             {
                 return false;
@@ -66,7 +71,7 @@ namespace PeacockAutoUpdater.Forms
         private void button_openPeacockRootFolder_Click(object sender, EventArgs e)
         {
             settingsChanged = true;
-            fbd_main.ShowDialog();
+            fbd_main.ShowDialog(this);
             UpdatePeacockRootFolder(fbd_main.SelectedPath);
         }
     }

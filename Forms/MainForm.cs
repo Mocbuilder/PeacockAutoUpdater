@@ -1,6 +1,8 @@
+using PeacockAutoUpdater.Forms;
 using PeacockAutoUpdater.Models;
 using PeacockAutoUpdater.Services;
-using PeacockAutoUpdater.Forms;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace PeacockAutoUpdater
@@ -24,6 +26,7 @@ namespace PeacockAutoUpdater
             _updateService = new UpdateService(_configService);
             _lastResult = initialResult;
 
+            //GetCurrentVersionFromLog();
             ProcessReleaseResult(_lastResult);
 
             //do this last to make it apply to already appended text    
@@ -160,7 +163,7 @@ namespace PeacockAutoUpdater
                 throw new Exception("Config could not be initialised.");
             }
 
-            SettingsForm settingsForm = new SettingsForm(_configService._config.PeacockRootFolder, _configService);
+            SettingsForm settingsForm = new SettingsForm(_configService);
             settingsForm.ShowDialog();
         }
 
@@ -209,6 +212,49 @@ namespace PeacockAutoUpdater
             {
                 CheckLatestRelease();
             }
+        }
+
+        public void GetCurrentVersionFromLog()
+        {
+            /*
+            if (string.IsNullOrEmpty(_configService._config.PeacockRootFolder))
+            {
+                button_settings_Click(this, new EventArgs());
+            }
+            */
+            string logsFolder = Path.Combine(_configService._config.PeacockRootFolder, "logs");
+            string logFile = Directory.GetFiles(logsFolder)[0];
+
+            string[] logLines = File.ReadAllLines(logFile);
+
+            string peacockVersion = "Not found";
+
+            foreach (var line in logLines)
+            {
+                try
+                {
+                    using JsonDocument doc = JsonDocument.Parse(line);
+                    JsonElement root = doc.RootElement;
+
+                    if (root.TryGetProperty("message", out JsonElement messageElement))
+                    {
+                        string message = messageElement.GetString() ?? "";
+
+                        var match = Regex.Match(message, @"Peacock v([\d\.]+)");
+                        if (match.Success)
+                        {
+                            peacockVersion = match.Groups[1].Value;
+                            break;
+                        }
+                    }
+                }
+                catch (JsonException jex)
+                {
+                    throw new Exception($"Error while getting version from log: {jex.Message}");
+                }
+            }
+
+            _configService.SetLastPeacockVersion(peacockVersion);
         }
     }
 }

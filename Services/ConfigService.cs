@@ -1,4 +1,5 @@
-﻿using PeacockAutoUpdater.Models;
+﻿using PeacockAutoUpdater.Forms;
+using PeacockAutoUpdater.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -105,6 +106,22 @@ namespace PeacockAutoUpdater.Services
 
             SaveConfig();
             return true;
+        }
+
+        public void ConfirmConfig()
+        {
+            //currently only checks for peacockrootfolder, since that is the only value with a empty default.
+            //Thats also why it uses SettingsForm as dialog instead of a dedicated confirm settings form, since there are no other settings for now
+
+            if (_config.PeacockRootFolder != null)
+            {
+                return;
+            }
+
+            MessageBox.Show("Some Settings need to be confirmed before the program can continue.", "Confirm Settings", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            SettingsForm settings = new SettingsForm(this);
+            settings.Show();
         }
     }
 }

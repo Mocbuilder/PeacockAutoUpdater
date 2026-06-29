@@ -154,7 +154,6 @@
             FormBorderStyle = FormBorderStyle.SizableToolWindow;
             Name = "SettingsForm";
             ShowIcon = false;
-            ShowInTaskbar = false;
             Text = "PeacockAutoUpdater Settings";
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
