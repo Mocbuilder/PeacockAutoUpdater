@@ -23,14 +23,16 @@ namespace PeacockAutoUpdater.Forms
             _configService = configService;
             PeacockRootFolder = _configService._config.PeacockRootFolder;
             textBox_peacockRootFolder.Text = PeacockRootFolder;
-            fbd_main.SelectedPath = PeacockRootFolder;
+            if (!string.IsNullOrEmpty(PeacockRootFolder) && Directory.Exists(PeacockRootFolder))
+            {
+                fbd_main.SelectedPath = PeacockRootFolder;
+            }
         }
 
         private void UpdatePeacockRootFolder(string folder)
         {
             PeacockRootFolder = folder;
             textBox_peacockRootFolder.Text = folder;
-            
         }
 
         private bool ValidateSelectedSettings()
@@ -60,6 +62,7 @@ namespace PeacockAutoUpdater.Forms
             {
                 _configService.SetPeacockRootFolder(PeacockRootFolder);
             }
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
@@ -70,9 +73,27 @@ namespace PeacockAutoUpdater.Forms
 
         private void button_openPeacockRootFolder_Click(object sender, EventArgs e)
         {
-            settingsChanged = true;
-            fbd_main.ShowDialog(this);
-            UpdatePeacockRootFolder(fbd_main.SelectedPath);
+            if (fbd_main.ShowDialog(this) == DialogResult.OK)
+            {
+                settingsChanged = true;
+                UpdatePeacockRootFolder(fbd_main.SelectedPath);
+            }
+            /*
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Peacock Executable (PeacockPatcher.exe)|PeacockPatcher.exe";
+                ofd.Title = "Select the PeacockPatcher.exe in your Peacock Root Folder";
+
+                if (ofd.ShowDialog(this) == DialogResult.OK)
+                {
+                    // Extract the directory path from the selected file
+                    string selectedFolder = Path.GetDirectoryName(ofd.FileName);
+
+                    settingsChanged = true;
+                    UpdatePeacockRootFolder(selectedFolder);
+                }
+            }
+            */
         }
     }
 }

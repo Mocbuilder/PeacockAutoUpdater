@@ -20,17 +20,30 @@ namespace PeacockAutoUpdater
             InitializeComponent();
             this.DoubleBuffered = true;
 
+            this.Opacity = 0; //hide form
+
             _noDownload = noDownload;
             _configService = configService;
             _httpService = httpService;
             _updateService = new UpdateService(_configService);
             _lastResult = initialResult;
 
-            //GetCurrentVersionFromLog();
-            ProcessReleaseResult(_lastResult);
-
-            //do this last to make it apply to already appended text    
+            // Dont do this cause this isnt needed anymore, but need to reconsider after implementing log reading.    ProcessReleaseResult(_lastResult);
             richTextBox_version.SelectionAlignment = HorizontalAlignment.Center;
+        }
+
+        protected override async void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            LoadingBarForm loadingBarForm = new LoadingBarForm();
+            loadingBarForm.Show(this);
+
+            //do http stuff without blocking main thread but while still waiting
+            await CheckLatestReleaseAsync();
+
+            loadingBarForm.Close();
+            this.Opacity = 1;
         }
 
         private void ProcessReleaseResult((GithubResultType, string) releaseResult)
@@ -55,6 +68,13 @@ namespace PeacockAutoUpdater
 
         public async void CheckLatestRelease()
         {
+            //just for non-blocking calls such as buttons
+            await CheckLatestReleaseAsync();
+        }
+
+        public async Task CheckLatestReleaseAsync()
+        {
+            //Task that can be awaited and block the UI Thread
             button_resync.Enabled = false;
 
             var releaseResult = await _httpService.GetLatestRelease(_configService, _noDownload);
@@ -163,8 +183,10 @@ namespace PeacockAutoUpdater
                 throw new Exception("Config could not be initialised.");
             }
 
-            SettingsForm settingsForm = new SettingsForm(_configService);
-            settingsForm.ShowDialog();
+            using (SettingsForm settingsForm = new SettingsForm(_configService))
+            {
+                settingsForm.ShowDialog(this);
+            }
         }
 
         private void button_update_Click(object sender, EventArgs e)
@@ -216,12 +238,11 @@ namespace PeacockAutoUpdater
 
         public void GetCurrentVersionFromLog()
         {
-            /*
             if (string.IsNullOrEmpty(_configService._config.PeacockRootFolder))
             {
                 button_settings_Click(this, new EventArgs());
             }
-            */
+
             string logsFolder = Path.Combine(_configService._config.PeacockRootFolder, "logs");
             string logFile = Directory.GetFiles(logsFolder)[0];
 

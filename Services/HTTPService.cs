@@ -14,6 +14,11 @@ namespace PeacockAutoUpdater.Services
 
         public async Task<(GithubResultType, string)> GetLatestRelease(ConfigService configService, bool noDownload)
         {
+            if (noDownload)
+            {
+                return (GithubResultType.SameVersion, "Peacock is already on the latest version.");
+            }
+
             try
             {
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("PeacockAutoUpdater");
@@ -24,7 +29,7 @@ namespace PeacockAutoUpdater.Services
                     return (GithubResultType.Error, "No release found. Something probably went wrong.");
                 }
 
-                if (release.TagName != configService._config.LastPeacockVersion && !noDownload)
+                if (release.TagName != configService._config.LastPeacockVersion)
                 {
                     //find the asset that ends with .zip but doesn't have "-linux" in the name 'cause the others are useless for this purpose
                     var windowsAsset = release.Assets.FirstOrDefault(a =>

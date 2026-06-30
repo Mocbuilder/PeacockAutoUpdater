@@ -1,3 +1,4 @@
+using PeacockAutoUpdater.Forms;
 using PeacockAutoUpdater.Models;
 using PeacockAutoUpdater.Services;
 
@@ -9,7 +10,7 @@ namespace PeacockAutoUpdater
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             bool noDownload = false;
             if (args != null && args.Length > 0)
@@ -28,6 +29,7 @@ namespace PeacockAutoUpdater
                 }
             }
 
+            ApplicationConfiguration.Initialize();
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -40,15 +42,29 @@ namespace PeacockAutoUpdater
             var configService = new ConfigService();
             var httpService = new HTTPService();
 
-            (GithubResultType resultType, string version) releaseResult = (GithubResultType.Error, "Unknown");
-
-            if (configService._config != null)
+            if (string.IsNullOrEmpty(configService._config.PeacockRootFolder) || !Path.Exists(configService._config.PeacockRootFolder))
             {
-                releaseResult = await httpService.GetLatestRelease(configService, noDownload);
+                
+
+                while (true)
+                {
+                    using (SettingsForm settingsForm = new SettingsForm(configService))
+                    {
+                        if (settingsForm.ShowDialog() == DialogResult.OK)
+                        {
+                            break;
+                        }
+
+                        MessageBox.Show("You need to select your Peacock Root Folder.");
+                    }
+                }
             }
 
-            ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm(noDownload, configService, httpService, releaseResult));
+            //Only here so that MainForm._lastResult isnt null when initialising the form
+            (GithubResultType resultType, string version) releaseResult = (GithubResultType.SameVersion, "Checking...");
+
+            MainForm mainForm = new MainForm(noDownload, configService, httpService, releaseResult);
+            Application.Run(mainForm);
         }
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
