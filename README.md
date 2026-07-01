@@ -13,12 +13,14 @@
   - `contractsessions`
   - `plugins`
 
-> [!IMPORTANT]
-> Currently the Github API calls use the public API without authentication. Github has a rate limit of 60 requests per hour per IP addressfor unauthenticated requests. If this limit is hit, the updater will not be able to check for new releases until the limit resets.
+
+### Automatic Detection of current version
+This feature relies on the presence of a log-xxx.json file in the logs folder. For that to appear, you need to start the Peacock Server atleast once.
+
+### Check and Downlaod New Releases
+This feature relies on the GitHub API to check for new releases. No personal API tokens or credentials are required, but the API has a rate limit of 60 requests per hour per IP address for unauthenticated requests. If this limit is hit, the updater will not be able to check for new releases until the limit resets.
 
 ### Planned / Work in Progress
-
-- Automatic detection of currently installed Peacock version
 - Preservation of options.ini
 
 ### Command Line Arguments
