@@ -22,7 +22,9 @@ namespace PeacockAutoUpdater.Forms
             InitializeComponent();
             _configService = configService;
             PeacockRootFolder = _configService._config.PeacockRootFolder;
+            this.StartPosition = FormStartPosition.CenterScreen;
             textBox_peacockRootFolder.Text = PeacockRootFolder;
+
             if (!string.IsNullOrEmpty(PeacockRootFolder) && Directory.Exists(PeacockRootFolder))
             {
                 fbd_main.SelectedPath = PeacockRootFolder;

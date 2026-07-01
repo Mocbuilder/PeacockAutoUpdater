@@ -51,6 +51,8 @@ namespace PeacockAutoUpdater.Services
                 throw new Exception("Config was not initialised.");
             }
 
+            DeleteOldVersion();
+
             string zipPath = Path.Combine(_configService._config.TempPath, "update.zip");
             string extractionStagePath = Path.Combine(_configService._config.TempPath, "extract");
             string finalDestinationPath = _configService._config.PeacockRootFolder;
@@ -85,6 +87,24 @@ namespace PeacockAutoUpdater.Services
 
             //clean up the temporary staging folder
             Directory.Delete(extractionStagePath, recursive: true);
+        }
+
+        private void DeleteOldVersion()
+        {
+            if (_configService._config == null)
+            {
+                throw new Exception("Config was not initialised.");
+            }
+
+            string peacockRootFolder = _configService._config.PeacockRootFolder;
+            foreach (string file in Directory.GetFiles(peacockRootFolder))
+            {
+                File.Delete(file);
+            }
+            foreach (string dir in Directory.GetDirectories(peacockRootFolder))
+            {
+                Directory.Delete(dir, recursive: true);
+            }
         }
 
         private void CopyUserDataToTemp()

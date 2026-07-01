@@ -19,7 +19,7 @@ namespace PeacockAutoUpdater
         {
             InitializeComponent();
             this.DoubleBuffered = true;
-
+            this.StartPosition = FormStartPosition.CenterScreen;
             this.Opacity = 0; //hide form
 
             _noDownload = noDownload;
@@ -38,6 +38,8 @@ namespace PeacockAutoUpdater
 
             LoadingBarForm loadingBarForm = new LoadingBarForm();
             loadingBarForm.Show(this);
+
+            GetCurrentVersionFromLog();
 
             //do http stuff without blocking main thread but while still waiting
             await CheckLatestReleaseAsync();
@@ -203,12 +205,12 @@ namespace PeacockAutoUpdater
                 throw new Exception("Peacock Root Folder doesnt exist or wasnt selected! Please go to Settings and set the path correctly.");
             }
 
-            using (var dialog = new UpdateConfirmForm())
+            using (var dialog = new UpdateConfirmForm(_configService._config.PreserveData))
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     preserveUserData = dialog.PreserveData;
-                    _configService.SetPreserveData(dialog.PreserveData);
+                    _configService.SetPreserveData(preserveUserData);
                 }
                 else
                 {
@@ -218,6 +220,7 @@ namespace PeacockAutoUpdater
 
             _updateService.UpdatePeacock(preserveUserData);
             _configService.SetLastPeacockVersion(_lastResult.Item2);
+            MessageBox.Show($"Peacock has succesfully been updated to version {_lastResult.Item2}.", "Update Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Resync();
         }
 

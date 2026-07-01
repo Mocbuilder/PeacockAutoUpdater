@@ -13,9 +13,12 @@ namespace PeacockAutoUpdater.Forms
     public partial class UpdateConfirmForm : Form
     {
         public bool PreserveData => checkBox_preserveData.Checked;
-        public UpdateConfirmForm()
+        public UpdateConfirmForm(bool preserveDataCashed)
         {
             InitializeComponent();
+            checkBox_preserveData.Checked = preserveDataCashed;
+
+            this.StartPosition = FormStartPosition.CenterScreen;
 
             ToolTip labelToolTip = new ToolTip();
             labelToolTip.ToolTipTitle = "Information";

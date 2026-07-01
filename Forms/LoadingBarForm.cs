@@ -17,7 +17,7 @@ namespace PeacockAutoUpdater.Forms
         public LoadingBarForm()
         {
             InitializeComponent();
-            this.StartPosition = FormStartPosition.CenterParent;
+            this.StartPosition = FormStartPosition.CenterScreen;
             timer1.Tick += Timer1_Tick;
             timer1.Start();
         }
