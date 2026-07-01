@@ -14,7 +14,7 @@
   - `plugins`
 
 > [!IMPORTANT]
-> Currently the Github API calls use the public API without authentication. Github has a rate limit of 60 requests per hour for unauthenticated requests. If this limit is hit, the updater will not be able to check for new releases until the limit resets.
+> Currently the Github API calls use the public API without authentication. Github has a rate limit of 60 requests per hour per IP addressfor unauthenticated requests. If this limit is hit, the updater will not be able to check for new releases until the limit resets.
 
 ### Planned / Work in Progress
 
